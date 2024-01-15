@@ -69,7 +69,6 @@
 <script setup>
 const config = useRuntimeConfig();
 
-await useAuth().profile();
 const { authUser, profile } = useAuth();
 
 const message = '会員情報の更新が完了しました。';
