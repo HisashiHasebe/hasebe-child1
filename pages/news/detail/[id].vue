@@ -2,7 +2,7 @@
   <div>
     <UiPageHeader
       :path="[{ label: 'ニュース', to: '/news' }]"
-      :subject="news?.group_nm"
+      :subject="news.details.group_nm"
       subheading="News Release"
     />
 
@@ -11,17 +11,17 @@
         <article class="c-article">
           <header>
             <h1 class="c-heading--lv1">
-              {{ news?.subject }}
+              {{ news.details.subject }}
             </h1>
-            <time class="c-topics__date" :datetime="news?.ymd">{{
-              news?.ymd
+            <time class="c-topics__date" :datetime="news.details.ymd">{{
+              news.details.ymd
             }}</time>
             <span class="c-badge">
-              {{ news?.contents_type_nm }}
+              {{ news.details.contents_type_nm }}
             </span>
           </header>
           <div class="l-container--contents">
-            <div v-html="news?.contents"></div>
+            <div v-html="news.details.contents"></div>
           </div>
 
           <hr />
@@ -40,15 +40,14 @@
 <script setup>
 const config = useRuntimeConfig();
 
-import allNews from '~/json/all_news.json';
 const route = useRoute();
-const news = allNews.filter((i) => {
-  if(i.slug) {
-    return i.slug === route.params.id;
-  } else {
-    return parseInt(i.topics_id) === parseInt(route.params.id, 10);
+
+const { data: news } = await useFetch(
+  `${config.public.kurocoApiDomain}/rcms-api/1/news/details/${route.params.id}`,
+  {
+    credentials: 'include',
   }
-})[0];
+);
 const { data: newsConditionMaster } = await useFetch(
   `${config.public.kurocoApiDomain}/rcms-api/1/master`,
   {
