@@ -8,7 +8,7 @@
       />
 
       <div class="l-container--large l-container--contents">
-        <article v-if="response?.details" class="c-article">
+        <article v-if="!errorFlg" class="c-article">
           <header>
             <h1 class="c-heading--lv1">
               {{ response.details.subject }}
@@ -68,6 +68,8 @@ const config = useRuntimeConfig();
 
 const { isLoggedIn } = useAuth();
 
+const errorFlg = ref(false);
+
 const route = useRoute();
 // use $fetch() instead of useFetch() to avoid using cache.
 // for the specific case that user can not see this page after changing Regular -> Premium,
@@ -78,5 +80,8 @@ const response = await $fetch(
     credentials: 'include',
     server: false,
   }
-).catch((error) => console.info(error));
+  ).catch((error) => {
+  console.info(error)
+  errorFlg.value = true;
+});
 </script>
