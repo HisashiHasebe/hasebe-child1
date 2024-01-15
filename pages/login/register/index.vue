@@ -71,7 +71,6 @@
 <script setup>
 const config = useRuntimeConfig();
 
-await useAuth().profile();
 const { login } = useAuth();
 
 const signupDone = ref(false);
